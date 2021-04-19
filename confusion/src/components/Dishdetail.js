@@ -5,7 +5,7 @@ import { Card, CardImg, CardBody, CardText, CardTitle } from 'reactstrap';
 export default class Dishdetail extends Component {
 
     convertDateToCommentDateFormat(timestamp) {
-        const date = new Date(timestamp);
+        const date = new Date(Date.parse(timestamp));
         return date.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
     }
 
@@ -52,12 +52,15 @@ export default class Dishdetail extends Component {
     render() {
         if (this.props.dish != null) {
             return (
-                <div className="row">
-                    <div className="col-12 col-md-5 m-1">
-                        {this.renderDish(this.props.dish)}
-                    </div>
-                    <div className="col-12 col-md-5 m-1">
-                        {this.renderComments(this.props.dish.comments)}
+                <div className="container">
+                    <div className='row'>
+                        <div className="col-12 col-md-5 m-1">
+                            {this.renderDish(this.props.dish)}
+                        </div>
+                        <div className="col-12 col-md-5 m-1">
+                            {this.renderComments(this.props.dish.comments)}
+                        </div>
+
                     </div>
                 </div>
             );
