@@ -1,5 +1,6 @@
 import React from 'react';
-import { Card, CardImg, CardBody, CardText, CardTitle } from 'reactstrap';
+import { Card, CardImg, CardBody, CardText, CardTitle, Breadcrumb, BreadcrumbItem } from 'reactstrap';
+import { Link } from 'react-router-dom';
 
 
 
@@ -15,10 +16,7 @@ const RenderDish = ({ dish }) => {
     );
 };
 
-const RenderComments = ({ dish }) => {
-
-    let comments = dish.comments;
-
+const RenderComments = ({ comments }) => {
     function convertDateToCommentDateFormat(timestamp) {
         const date = new Date(Date.parse(timestamp));
         return date.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
@@ -55,11 +53,22 @@ const DishDeltail = (props) => {
         return (
             <div className="container">
                 <div className='row'>
-                    <div className="col-12 col-md-5 m-1">
+                    <Breadcrumb>
+                        <BreadcrumbItem> <Link to='/menu'>Menu</Link></BreadcrumbItem>
+                        <BreadcrumbItem active> {props.dish.name} </BreadcrumbItem>
+                    </Breadcrumb>
+                    <div className='col-12'>
+                        <h3>{props.dish.name}</h3>
+                        <hr />
+                    </div>
+                </div>
+                <div className='row'>
+                    <div className="col-md-5 m-1">
                         <RenderDish dish={props.dish} />
                     </div>
-                    <div className="col-12 col-md-5 m-1">
-                        <RenderComments dish={props.dish} />
+                    <div className="col-md-5 m-1">
+                        <RenderComments comments={props.comments} />
+                        
                     </div>
                 </div>
             </div>

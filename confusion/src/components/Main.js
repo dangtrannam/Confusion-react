@@ -1,10 +1,15 @@
 import React, { Component } from 'react';
 import Home from './Home';
 import Menu from './Menu';
+import Contact from './Contact';
 import DishDetail from './Dishdetail';
-import { DISHES } from '../shared/dishes';
 import Header from './Header';
 import Footer from "./Footer";
+import { DISHES } from '../shared/dishes';
+import { COMMENTS } from '../shared/comments';
+import { LEADERS } from '../shared/leaders';
+import { PROMOTIONS } from '../shared/promotions';
+
 import { Switch, Route, Redirect } from 'react-router-dom';
 
 export default class Main extends Component {
@@ -13,7 +18,10 @@ export default class Main extends Component {
         super(props);
         this.state = {
             dishes: DISHES,
-            selectedDish: null
+            comments: COMMENTS,
+            promotions: PROMOTIONS,
+            leaders: LEADERS
+
         };
     }
 
@@ -24,16 +32,30 @@ export default class Main extends Component {
     render() {
         const HomePage = () => {
             return (
-                <Home />
+                <Home
+                    dish={this.state.dishes.filter(dish => dish.featured)[0]}
+                    promotion={this.state.promotions.filter(promo => promo.featured)[0]}
+                    leader={this.state.leaders.filter(leader => leader.featured)[0]}
+                />
             )
         }
 
+        const DishWithId = ({ match }) => {
+            return (
+                <DishDetail
+                    dish={this.state.dishes.filter(dish => dish.id === parseInt(match.params.dishId, 10))[0]}
+                    comments={this.state.comments.filter(comment => comment.dishId === parseInt(match.params.dishId, 10))}
+                />
+            )
+        }
         return (
             <div>
                 <Header />
                 <Switch>
                     <Route path='/home' component={HomePage} />
                     <Route exact path='/menu' component={() => <Menu dishes={this.state.dishes} />} />
+                    <Route path='/menu/:dishId' component={DishWithId} />
+                    <Route exact path='/contactus' component={Contact} />
                     <Redirect to='/home' />
                 </Switch>
                 <Footer />
