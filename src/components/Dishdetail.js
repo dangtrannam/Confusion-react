@@ -1,7 +1,7 @@
 import React from 'react';
-import { Card, CardImg, CardBody, CardText, CardTitle, Breadcrumb, BreadcrumbItem } from 'reactstrap';
+import { Card, CardImg, CardBody, CardText, CardTitle, Breadcrumb, BreadcrumbItem, Button, Modal, ModalHeader, ModalBody, Row, Label, Col } from 'reactstrap';
 import { Link } from 'react-router-dom';
-
+import { Control, LocalForm, Errors } from 'react-redux-form';
 
 
 const RenderDish = ({ dish }) => {
@@ -44,9 +44,98 @@ const RenderComments = ({ comments }) => {
             <ul className="list-unstyled">
                 {renderedComments}
             </ul>
+            <CommentModal />
         </div>
     );
 };
+
+const required = val => val && val.length;
+const maxLength = len => val => !val || val.length <= len;
+const minLength = len => val => val && val.length >= len;
+const CommentModal = () => {
+
+    const [modal, setModal] = React.useState(false)
+    const toggle = () => setModal(!modal)
+
+    const handleSubmit = (values) => {
+        console.log('Current state is: ' + JSON.stringify(values))
+        alert('Current state is: ' + JSON.stringify(values))
+    }
+    const closeBtn = <Button className="close" onClick={toggle}>&times;</Button>
+
+    return (
+        <React.Fragment>
+            <Button outline color="secondary" onClick={toggle}>
+                <i className="fa fa-pencil-square-o fa-lg"></i>
+                 Submit Comment
+            </Button>
+            <Modal isOpen={modal} toggle={toggle}>
+                <ModalHeader className='col-12' toggle={toggle} close={closeBtn}>
+                    <h3>Submit Comment</h3>
+                </ModalHeader>
+                <ModalBody className='col-12 col-md-9'>
+                    <LocalForm
+                        onSubmit={values => handleSubmit(values)}>
+                        <Row className='form-group'>
+                            <Label htmlFor='rating' md={12}><h5>Rating</h5></Label>
+                            <Col md={12}>
+                                <Control.select model='.rating' className='form-control' name='rating'>
+                                    <option>1</option>
+                                    <option>2</option>
+                                    <option>3</option>
+                                    <option>4</option>
+                                    <option>5</option>
+                                </Control.select>
+                            </Col>
+                        </Row>
+                        <Row className='form-group'>
+                            <Label htmlFor='yourname' md={12}><h5>Your Name</h5></Label>
+                            <Col md={12}>
+                                <Control.text className='form-control'
+                                    model='.yourname'
+                                    name='yourname' id='yourname'
+                                    placeholder="Your name"
+                                    validators={{
+                                        required,
+                                        minLength: minLength(3),
+                                        maxLength: maxLength(15)
+                                    }} />
+                                <Errors
+                                    className='text-danger'
+                                    model='.yourname'
+                                    show='touched'
+                                    messages={{
+                                        required: 'Required',
+                                        minLength: 'Must be greater than 2 characters',
+                                        maxLength: 'Must be 15 characters or less'
+                                    }} />
+
+                            </Col>
+                        </Row>
+                        <Row className='form-group'>
+                            <Label htmlFor='comment' md={12}><h5>Comment</h5></Label>
+                            <Col md={12}>
+                                <Control.textarea className='form-control'
+                                    name='comment' id='comment'
+                                    model='.comment' rows='12'
+                                />
+                            </Col>
+                        </Row>
+                        <Row className='form-group'>
+                            <Col>
+                                <Button type='submit' color='primary'>
+                                    Submit
+                                    </Button>
+                            </Col>
+                        </Row>
+                    </LocalForm>
+                </ModalBody>
+            </Modal>
+        </React.Fragment>
+    )
+}
+
+
 
 const DishDeltail = (props) => {
     if (props.dish != null) {
@@ -68,7 +157,6 @@ const DishDeltail = (props) => {
                     </div>
                     <div className="col-md-5 m-1">
                         <RenderComments comments={props.comments} />
-                        
                     </div>
                 </div>
             </div>
