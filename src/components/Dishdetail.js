@@ -16,7 +16,7 @@ const RenderDish = ({ dish }) => {
     );
 };
 
-const RenderComments = ({ comments }) => {
+const RenderComments = ({ comments, addComment, dishId }) => {
     function convertDateToCommentDateFormat(timestamp) {
         const date = new Date(Date.parse(timestamp));
         return date.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
@@ -44,7 +44,7 @@ const RenderComments = ({ comments }) => {
             <ul className="list-unstyled">
                 {renderedComments}
             </ul>
-            <CommentModal />
+            <CommentModal dishId={dishId} addComment={addComment} />
         </div>
     );
 };
@@ -52,15 +52,16 @@ const RenderComments = ({ comments }) => {
 const required = val => val && val.length;
 const maxLength = len => val => !val || val.length <= len;
 const minLength = len => val => val && val.length >= len;
-const CommentModal = () => {
 
-    const [modal, setModal] = React.useState(false)
-    const toggle = () => setModal(!modal)
+const CommentModal = (props) => {
+    const [modal, setModal] = React.useState(false);
+    const toggle = () => setModal(!modal);
 
     const handleSubmit = (values) => {
-        console.log('Current state is: ' + JSON.stringify(values))
-        alert('Current state is: ' + JSON.stringify(values))
+        toggle();
+        props.addComment(props.dishId, values.rating, values.author, values.comment);
     }
+
     const closeBtn = <Button className="close" onClick={toggle}>&times;</Button>
 
     return (
@@ -79,7 +80,10 @@ const CommentModal = () => {
                         <Row className='form-group'>
                             <Label htmlFor='rating' md={12}><h5>Rating</h5></Label>
                             <Col md={12}>
-                                <Control.select model='.rating' className='form-control' name='rating'>
+                                <Control.select model='.rating'
+                                    className='form-control'
+                                    name='rating'>
+                                    <option>Star</option>
                                     <option>1</option>
                                     <option>2</option>
                                     <option>3</option>
@@ -89,11 +93,11 @@ const CommentModal = () => {
                             </Col>
                         </Row>
                         <Row className='form-group'>
-                            <Label htmlFor='yourname' md={12}><h5>Your Name</h5></Label>
+                            <Label htmlFor='author' md={12}><h5>Your Name</h5></Label>
                             <Col md={12}>
                                 <Control.text className='form-control'
-                                    model='.yourname'
-                                    name='yourname' id='yourname'
+                                    model='.author'
+                                    name='author' id='author'
                                     placeholder="Your name"
                                     validators={{
                                         required,
@@ -102,7 +106,7 @@ const CommentModal = () => {
                                     }} />
                                 <Errors
                                     className='text-danger'
-                                    model='.yourname'
+                                    model='.author'
                                     show='touched'
                                     messages={{
                                         required: 'Required',
@@ -156,7 +160,9 @@ const DishDeltail = (props) => {
                         <RenderDish dish={props.dish} />
                     </div>
                     <div className="col-md-5 m-1">
-                        <RenderComments comments={props.comments} />
+                        <RenderComments comments={props.comments}
+                            addComment={props.addComment}
+                            dishId={props.dish.id} />
                     </div>
                 </div>
             </div>

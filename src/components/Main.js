@@ -7,7 +7,8 @@ import Header from './Header';
 import Footer from "./Footer";
 import About from './About';
 import { Switch, Route, Redirect, withRouter } from 'react-router-dom';
-import { connect } from 'react-redux'
+import { connect } from 'react-redux';
+import { addComment } from '../redux/ActionCreators';
 
 const mapStatetoProps = (state) => {
     return {
@@ -17,16 +18,18 @@ const mapStatetoProps = (state) => {
         leaders: state.leaders
     }
 }
-class Main extends Component {
 
-    constructor(props) {
-        super(props);
-    }
+const mapDispatchToProps = dispatch => ({
+
+    addComment: (dishId, rating, author, comment) => dispatch(addComment(dishId, rating, author, comment))
+
+});
+
+class Main extends Component {
 
     onDishSelect(dishId) {
         this.setState({ selectedDish: dishId });
     }
-
 
     render() {
         const HomePage = () => {
@@ -44,8 +47,8 @@ class Main extends Component {
                 <DishDetail
                     dish={this.props.dishes.filter(dish => dish.id === parseInt(match.params.dishId, 10))[0]}
                     comments={this.props.comments.filter(comment => comment.dishId === parseInt(match.params.dishId, 10))}
-                />
-            )
+                    addComment={this.props.addComment}
+                />)
         }
 
         const AboutUs = () => {
@@ -53,6 +56,7 @@ class Main extends Component {
                 <About leaders={this.props.leaders} />
             )
         }
+
         return (
             <div>
                 <Header />
@@ -65,8 +69,8 @@ class Main extends Component {
                     <Redirect to='/home' />
                 </Switch>
                 <Footer />
-            </div>
+            </div >
         );
     }
 }
-export default withRouter(connect(mapStatetoProps)(Main));
+export default withRouter(connect(mapStatetoProps, mapDispatchToProps)(Main));
