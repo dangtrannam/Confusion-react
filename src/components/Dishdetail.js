@@ -32,7 +32,7 @@ const RenderDish = ({ dish }) => {
   );
 };
 
-const RenderComments = ({ comments, addComment, dishId }) => {
+const RenderComments = ({ comments, postComment, dishId }) => {
   function convertDateToCommentDateFormat(timestamp) {
     const date = new Date(Date.parse(timestamp));
     return date.toLocaleDateString("en-US", {
@@ -62,7 +62,7 @@ const RenderComments = ({ comments, addComment, dishId }) => {
     <div>
       <h4>Comments</h4>
       <ul className="list-unstyled">{renderedComments}</ul>
-      <CommentModal dishId={dishId} addComment={addComment} />
+      <CommentModal dishId={dishId} postComment={postComment} />
     </div>
   );
 };
@@ -77,7 +77,7 @@ const CommentModal = (props) => {
 
   const handleSubmit = (values) => {
     toggle();
-    props.addComment(
+    props.postComment(
       props.dishId,
       values.rating,
       values.author,
@@ -219,7 +219,7 @@ const DishDeltail = (props) => {
           <div className="col-md-5 m-1">
             <RenderComments
               comments={props.comments}
-              addComment={props.addComment}
+              postComment={props.postComment}
               dishId={props.dish.id}
             />
           </div>
