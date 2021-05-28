@@ -32,7 +32,7 @@ const RenderCard = ({ item, isLoading, errMess }) => {
 
 const Home = (props) => {
   return (
-    <div className="Container">
+    <div className="container">
       <div className="row align-items-start">
         <div className="col-md m-1">
           <RenderCard

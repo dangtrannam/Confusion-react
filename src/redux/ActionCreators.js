@@ -1,5 +1,6 @@
 import * as ActionTypes from "./ActionTypes";
 import { baseUrl } from "../shared/baseUrl";
+import fetch from "cross-fetch";
 
 export const postComment = (dishId, rating, author, comment) => (dispatch) => {
   const newComment = {
