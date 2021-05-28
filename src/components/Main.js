@@ -90,6 +90,7 @@ class Main extends Component {
             key={this.props.location.key}
             classNames="page"
             timeout={300}
+            exit={false}
           >
             <Switch location={this.props.location}>
               <Route path="/home" component={HomePage} />
