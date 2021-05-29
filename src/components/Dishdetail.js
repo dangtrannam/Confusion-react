@@ -19,16 +19,24 @@ import { Link } from "react-router-dom";
 import { Control, LocalForm, Errors } from "react-redux-form";
 import { Loading } from "./Loading";
 import { baseUrl } from "../shared/baseUrl";
+import { FadeTransform, Fade, Stagger } from "react-animation-components";
 
 const RenderDish = ({ dish }) => {
   return (
-    <Card>
-      <CardImg width="100%" src={baseUrl + dish.image} alt={dish.name} />
-      <CardBody>
-        <CardTitle>{dish.name}</CardTitle>
-        <CardText>{dish.description}</CardText>
-      </CardBody>
-    </Card>
+    <FadeTransform
+      in
+      transformProps={{
+        exitTransform: "scale(0.5) translateY(-50%)",
+      }}
+    >
+      <Card>
+        <CardImg width="100%" src={baseUrl + dish.image} alt={dish.name} />
+        <CardBody>
+          <CardTitle>{dish.name}</CardTitle>
+          <CardText>{dish.description}</CardText>
+        </CardBody>
+      </Card>
+    </FadeTransform>
   );
 };
 
@@ -48,12 +56,15 @@ const RenderComments = ({ comments, postComment, dishId }) => {
   } else {
     renderedComments = comments.map((comment) => {
       return (
-        <li key={comment.id}>
-          <p>{comment.comment}</p>
-          <p>
-            -- {comment.author}, {convertDateToCommentDateFormat(comment.date)}
-          </p>
-        </li>
+        <Fade in>
+          <li key={comment.id}>
+            <p>{comment.comment}</p>
+            <p>
+              -- {comment.author},{" "}
+              {convertDateToCommentDateFormat(comment.date)}
+            </p>
+          </li>
+        </Fade>
       );
     });
   }
@@ -61,7 +72,9 @@ const RenderComments = ({ comments, postComment, dishId }) => {
   return (
     <div>
       <h4>Comments</h4>
-      <ul className="list-unstyled">{renderedComments}</ul>
+      <ul className="list-unstyled">
+        <Stagger in>{renderedComments}</Stagger>
+      </ul>
       <CommentModal dishId={dishId} postComment={postComment} />
     </div>
   );
