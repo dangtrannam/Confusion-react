@@ -209,6 +209,22 @@
       "comment": "So delicious",
       "date": "2021-05-27T14:55:00.029Z",
       "id": 20
+    },
+    {
+      "dishId": 1,
+      "rating": "5",
+      "author": "Tien Nguyen",
+      "comment": "Món này ngon, lần sau sẽ ghé uống tiếp",
+      "date": "2021-05-30T03:18:44.002Z",
+      "id": 21
+    },
+    {
+      "dishId": 0,
+      "rating": "4",
+      "author": "Tien",
+      "comment": "Cũng tạm",
+      "date": "2021-05-30T03:19:16.697Z",
+      "id": 22
     }
   ],
   "promotions": [
